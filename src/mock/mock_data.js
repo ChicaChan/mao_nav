@@ -1,32 +1,310 @@
 export const mockData = {
   "categories": [
     {
-      "id": "my-favorites",
-      "name": "我的常用",
-      "icon": "💥",
+      "id": "search-engines",
+      "name": "搜索引擎",
+      "icon": "🔍",
       "order": 0,
       "sites": [
         {
-          "id": "site-1752857783656",
-          "name": "OpenAI",
-          "url": "https://chatgpt.com",
-          "description": "OpenAI,好用👌",
-          "icon": "/sitelogo/chatgpt.com.ico"
+          "id": "google",
+          "name": "Google",
+          "url": "https://www.google.com",
+          "description": "全球最大的搜索引擎",
+          "icon": "/sitelogo/www.google.com.ico"
         },
         {
-          "id": "linux-do",
-          "name": "Linux.do",
-          "url": "https://linux.do",
-          "description": "Linux技术社区，Peace and Love",
-          "icon": "/sitelogo/linux.do.ico"
+          "id": "baidu",
+          "name": "百度",
+          "url": "https://www.baidu.com",
+          "description": "中国最大的搜索引擎",
+          "icon": "/sitelogo/www.baidu.com.ico"
         },
         {
-          "id": "site-1752649007053",
-          "name": "BeJson",
-          "url": "https://www.bejson.com/",
-          "description": "工具大全",
-          "icon": "/sitelogo/www.bejson.com.ico"
+          "id": "bing",
+          "name": "Bing",
+          "url": "https://www.bing.com",
+          "description": "微软搜索引擎",
+          "icon": "/sitelogo/www.bing.com.ico"
         },
+        {
+          "id": "duckduckgo",
+          "name": "DuckDuckGo",
+          "url": "https://duckduckgo.com",
+          "description": "注重隐私的搜索引擎",
+          "icon": "/sitelogo/duckduckgo.com.ico"
+        },
+        {
+          "id": "yandex",
+          "name": "Yandex",
+          "url": "https://yandex.com",
+          "description": "俄罗斯搜索引擎",
+          "icon": "/sitelogo/yandex.com.ico"
+        }
+      ]
+    },
+    {
+      "id": "social-media",
+      "name": "社交媒体",
+      "icon": "📱",
+      "order": 1,
+      "sites": [
+        {
+          "id": "twitter",
+          "name": "Twitter",
+          "url": "https://twitter.com",
+          "description": "全球社交媒体平台",
+          "icon": "/sitelogo/twitter.com.ico"
+        },
+        {
+          "id": "facebook",
+          "name": "Facebook",
+          "url": "https://www.facebook.com",
+          "description": "全球最大社交网络",
+          "icon": "/sitelogo/www.facebook.com.ico"
+        },
+        {
+          "id": "instagram",
+          "name": "Instagram",
+          "url": "https://www.instagram.com",
+          "description": "图片分享社交平台",
+          "icon": "/sitelogo/www.instagram.com.ico"
+        },
+        {
+          "id": "linkedin",
+          "name": "LinkedIn",
+          "url": "https://www.linkedin.com",
+          "description": "职业社交网络",
+          "icon": "/sitelogo/www.linkedin.com.ico"
+        },
+        {
+          "id": "weibo",
+          "name": "微博",
+          "url": "https://weibo.com",
+          "description": "中国社交媒体平台",
+          "icon": "/sitelogo/weibo.com.ico"
+        },
+        {
+          "id": "wechat",
+          "name": "微信网页版",
+          "url": "https://wx.qq.com",
+          "description": "微信网页版",
+          "icon": "/sitelogo/wx.qq.com.ico"
+        },
+        {
+          "id": "discord",
+          "name": "Discord",
+          "url": "https://discord.com",
+          "description": "游戏社交平台",
+          "icon": "/sitelogo/discord.com.ico"
+        },
+        {
+          "id": "reddit",
+          "name": "Reddit",
+          "url": "https://www.reddit.com",
+          "description": "社区讨论平台",
+          "icon": "/sitelogo/www.reddit.com.ico"
+        }
+      ]
+    },
+    {
+      "id": "video-streaming",
+      "name": "视频娱乐",
+      "icon": "🎬",
+      "order": 2,
+      "sites": [
+        {
+          "id": "youtube",
+          "name": "YouTube",
+          "url": "https://www.youtube.com",
+          "description": "全球最大视频平台",
+          "icon": "/sitelogo/www.youtube.com.ico"
+        },
+        {
+          "id": "bilibili",
+          "name": "哔哩哔哩",
+          "url": "https://www.bilibili.com",
+          "description": "中国弹幕视频网站",
+          "icon": "/sitelogo/www.bilibili.com.ico"
+        },
+        {
+          "id": "netflix",
+          "name": "Netflix",
+          "url": "https://www.netflix.com",
+          "description": "在线视频流媒体",
+          "icon": "/sitelogo/www.netflix.com.ico"
+        },
+        {
+          "id": "twitch",
+          "name": "Twitch",
+          "url": "https://www.twitch.tv",
+          "description": "游戏直播平台",
+          "icon": "/sitelogo/www.twitch.tv.ico"
+        },
+        {
+          "id": "douyin",
+          "name": "抖音网页版",
+          "url": "https://www.douyin.com",
+          "description": "短视频平台",
+          "icon": "/sitelogo/www.douyin.com.ico"
+        },
+        {
+          "id": "iqiyi",
+          "name": "爱奇艺",
+          "url": "https://www.iqiyi.com",
+          "description": "在线视频平台",
+          "icon": "/sitelogo/www.iqiyi.com.ico"
+        },
+        {
+          "id": "youku",
+          "name": "优酷",
+          "url": "https://www.youku.com",
+          "description": "在线视频平台",
+          "icon": "/sitelogo/www.youku.com.ico"
+        },
+        {
+          "id": "tencent-video",
+          "name": "腾讯视频",
+          "url": "https://v.qq.com",
+          "description": "腾讯视频平台",
+          "icon": "/sitelogo/v.qq.com.ico"
+        }
+      ]
+    },
+    {
+      "id": "news-media",
+      "name": "新闻资讯",
+      "icon": "📰",
+      "order": 3,
+      "sites": [
+        {
+          "id": "bbc",
+          "name": "BBC News",
+          "url": "https://www.bbc.com/news",
+          "description": "英国广播公司新闻",
+          "icon": "/sitelogo/www.bbc.com.ico"
+        },
+        {
+          "id": "cnn",
+          "name": "CNN",
+          "url": "https://www.cnn.com",
+          "description": "美国有线电视新闻网",
+          "icon": "/sitelogo/www.cnn.com.ico"
+        },
+        {
+          "id": "xinhua",
+          "name": "新华网",
+          "url": "http://www.xinhuanet.com",
+          "description": "中国新华通讯社",
+          "icon": "/sitelogo/www.xinhuanet.com.ico"
+        },
+        {
+          "id": "people",
+          "name": "人民网",
+          "url": "http://www.people.com.cn",
+          "description": "人民日报官方网站",
+          "icon": "/sitelogo/www.people.com.cn.ico"
+        },
+        {
+          "id": "sina-news",
+          "name": "新浪新闻",
+          "url": "https://news.sina.com.cn",
+          "description": "新浪新闻中心",
+          "icon": "/sitelogo/news.sina.com.cn.ico"
+        },
+        {
+          "id": "toutiao",
+          "name": "今日头条",
+          "url": "https://www.toutiao.com",
+          "description": "个性化推荐新闻",
+          "icon": "/sitelogo/www.toutiao.com.ico"
+        },
+        {
+          "id": "zhihu",
+          "name": "知乎",
+          "url": "https://www.zhihu.com",
+          "description": "知识问答社区",
+          "icon": "/sitelogo/www.zhihu.com.ico"
+        },
+        {
+          "id": "36kr",
+          "name": "36氪",
+          "url": "https://36kr.com",
+          "description": "科技创业媒体",
+          "icon": "/sitelogo/36kr.com.ico"
+        }
+      ]
+    },
+    {
+      "id": "shopping",
+      "name": "购物电商",
+      "icon": "🛒",
+      "order": 4,
+      "sites": [
+        {
+          "id": "amazon",
+          "name": "Amazon",
+          "url": "https://www.amazon.com",
+          "description": "全球最大电商平台",
+          "icon": "/sitelogo/www.amazon.com.ico"
+        },
+        {
+          "id": "taobao",
+          "name": "淘宝",
+          "url": "https://www.taobao.com",
+          "description": "中国最大购物网站",
+          "icon": "/sitelogo/www.taobao.com.ico"
+        },
+        {
+          "id": "tmall",
+          "name": "天猫",
+          "url": "https://www.tmall.com",
+          "description": "品牌商城",
+          "icon": "/sitelogo/www.tmall.com.ico"
+        },
+        {
+          "id": "jd",
+          "name": "京东",
+          "url": "https://www.jd.com",
+          "description": "综合网购商城",
+          "icon": "/sitelogo/www.jd.com.ico"
+        },
+        {
+          "id": "pdd",
+          "name": "拼多多",
+          "url": "https://www.pinduoduo.com",
+          "description": "团购电商平台",
+          "icon": "/sitelogo/www.pinduoduo.com.ico"
+        },
+        {
+          "id": "ebay",
+          "name": "eBay",
+          "url": "https://www.ebay.com",
+          "description": "在线拍卖及购物网站",
+          "icon": "/sitelogo/www.ebay.com.ico"
+        },
+        {
+          "id": "aliexpress",
+          "name": "AliExpress",
+          "url": "https://www.aliexpress.com",
+          "description": "全球速卖通",
+          "icon": "/sitelogo/www.aliexpress.com.ico"
+        },
+        {
+          "id": "suning",
+          "name": "苏宁易购",
+          "url": "https://www.suning.com",
+          "description": "综合电商平台",
+          "icon": "/sitelogo/www.suning.com.ico"
+        }
+      ]
+    },
+    {
+      "id": "dev-tools",
+      "name": "开发工具",
+      "icon": "💻",
+      "order": 5,
+      "sites": [
         {
           "id": "github",
           "name": "GitHub",
@@ -35,25 +313,67 @@ export const mockData = {
           "icon": "/sitelogo/github.com.ico"
         },
         {
-          "id": "curlconverter",
-          "name": "curl converter",
-          "url": "https://curlconverter.com/",
-          "description": "curl命令转换工具",
-          "icon": "/sitelogo/curlconverter.com.ico"
+          "id": "gitlab",
+          "name": "GitLab",
+          "url": "https://gitlab.com",
+          "description": "DevOps平台",
+          "icon": "/sitelogo/gitlab.com.ico"
+        },
+        {
+          "id": "stackoverflow",
+          "name": "Stack Overflow",
+          "url": "https://stackoverflow.com",
+          "description": "程序员问答社区",
+          "icon": "/sitelogo/stackoverflow.com.ico"
+        },
+        {
+          "id": "codepen",
+          "name": "CodePen",
+          "url": "https://codepen.io",
+          "description": "前端代码在线编辑",
+          "icon": "/sitelogo/codepen.io.ico"
+        },
+        {
+          "id": "jsfiddle",
+          "name": "JSFiddle",
+          "url": "https://jsfiddle.net",
+          "description": "在线代码编辑器",
+          "icon": "/sitelogo/jsfiddle.net.ico"
+        },
+        {
+          "id": "replit",
+          "name": "Replit",
+          "url": "https://replit.com",
+          "description": "在线编程环境",
+          "icon": "/sitelogo/replit.com.ico"
+        },
+        {
+          "id": "npm",
+          "name": "npm",
+          "url": "https://www.npmjs.com",
+          "description": "Node.js包管理器",
+          "icon": "/sitelogo/www.npmjs.com.ico"
+        },
+        {
+          "id": "docker-hub",
+          "name": "Docker Hub",
+          "url": "https://hub.docker.com",
+          "description": "容器镜像仓库",
+          "icon": "/sitelogo/hub.docker.com.ico"
         }
       ]
     },
     {
       "id": "ai-tools",
-      "name": "AI智能",
+      "name": "AI工具",
       "icon": "🤖",
-      "order": 1,
+      "order": 6,
       "sites": [
         {
           "id": "chatgpt",
           "name": "ChatGPT",
           "url": "https://chat.openai.com",
-          "description": "OpenAI对话AI助手",
+          "description": "OpenAI对话AI",
           "icon": "/sitelogo/chat.openai.com.ico"
         },
         {
@@ -64,11 +384,32 @@ export const mockData = {
           "icon": "/sitelogo/claude.ai.ico"
         },
         {
+          "id": "gemini",
+          "name": "Gemini",
+          "url": "https://gemini.google.com",
+          "description": "Google AI助手",
+          "icon": "/sitelogo/gemini.google.com.ico"
+        },
+        {
           "id": "midjourney",
           "name": "Midjourney",
           "url": "https://www.midjourney.com",
-          "description": "AI图像生成工具",
+          "description": "AI图像生成",
           "icon": "/sitelogo/www.midjourney.com.ico"
+        },
+        {
+          "id": "stable-diffusion",
+          "name": "Stable Diffusion",
+          "url": "https://stablediffusionweb.com",
+          "description": "开源AI绘画",
+          "icon": "/sitelogo/stablediffusionweb.com.ico"
+        },
+        {
+          "id": "cursor",
+          "name": "Cursor",
+          "url": "https://cursor.sh",
+          "description": "AI代码编辑器",
+          "icon": "/sitelogo/cursor.sh.ico"
         },
         {
           "id": "copilot",
@@ -78,183 +419,26 @@ export const mockData = {
           "icon": "/sitelogo/github.com.ico"
         },
         {
-          "id": "cursor",
-          "name": "Cursor",
-          "url": "https://cursor.sh",
-          "description": "AI代码编辑器",
-          "icon": "/sitelogo/cursor.sh.ico"
+          "id": "perplexity",
+          "name": "Perplexity",
+          "url": "https://www.perplexity.ai",
+          "description": "AI搜索引擎",
+          "icon": "/sitelogo/www.perplexity.ai.ico"
         }
       ]
     },
     {
-      "id": "cloud",
-      "name": "云服务",
-      "icon": "☁️",
-      "order": 2,
-      "sites": [
-        {
-          "id": "cloudflare",
-          "name": "Cloudflare",
-          "url": "https://www.cloudflare.com",
-          "description": "全球CDN和网络安全服务",
-          "icon": "/sitelogo/www.cloudflare.com.ico"
-        },
-        {
-          "id": "vercel",
-          "name": "Vercel",
-          "url": "https://vercel.com",
-          "description": "前端部署平台",
-          "icon": "/sitelogo/vercel.com.ico"
-        },
-        {
-          "id": "aws",
-          "name": "AWS",
-          "url": "https://aws.amazon.com",
-          "description": "亚马逊云服务",
-          "icon": "/sitelogo/aws.amazon.com.ico"
-        },
-        {
-          "id": "aliyun",
-          "name": "阿里云",
-          "url": "https://www.aliyun.com",
-          "description": "阿里巴巴云计算",
-          "icon": "/sitelogo/www.aliyun.com.ico"
-        },
-        {
-          "id": "tencent-cloud",
-          "name": "腾讯云",
-          "url": "https://cloud.tencent.com",
-          "description": "腾讯云计算服务",
-          "icon": "/sitelogo/cloud.tencent.com.ico"
-        },
-        {
-          "id": "huawei-cloud",
-          "name": "华为云",
-          "url": "https://www.huaweicloud.com",
-          "description": "华为云计算服务",
-          "icon": "/sitelogo/www.huaweicloud.com.ico"
-        },
-        {
-          "id": "site-1752644060499",
-          "name": "怕死云",
-          "url": "https://www.pasyun.com/",
-          "description": "ipv6机器",
-          "icon": "/sitelogo/www.pasyun.com.ico"
-        }
-      ]
-    },
-    {
-      "id": "dev-tools",
-      "name": "开发工具",
-      "icon": "🛠️",
-      "order": 3,
-      "sites": [
-        {
-          "id": "github",
-          "name": "GitHub",
-          "url": "https://github.com",
-          "description": "代码托管平台",
-          "icon": "/sitelogo/github.com.ico"
-        },
-        {
-          "id": "vscode",
-          "name": "VS Code",
-          "url": "https://code.visualstudio.com",
-          "description": "代码编辑器",
-          "icon": "/sitelogo/code.visualstudio.com.ico"
-        },
-        {
-          "id": "webstorm",
-          "name": "WebStorm",
-          "url": "https://www.jetbrains.com/webstorm/",
-          "description": "专业前端IDE",
-          "icon": "/sitelogo/www.jetbrains.com.ico"
-        },
-        {
-          "id": "postman",
-          "name": "Postman",
-          "url": "https://www.postman.com",
-          "description": "API测试工具",
-          "icon": "/sitelogo/www.postman.com.ico"
-        },
-        {
-          "id": "android-studio",
-          "name": "Android Studio",
-          "url": "https://developer.android.com/studio",
-          "description": "Android官方开发工具",
-          "icon": "/sitelogo/developer.android.com.ico"
-        },
-        {
-          "id": "oracle-java",
-          "name": "Oracle Java",
-          "url": "https://www.oracle.com/java/technologies/downloads/",
-          "description": "Oracle官方Java下载",
-          "icon": "/sitelogo/www.oracle.com.ico"
-        }
-      ]
-    },
-    {
-      "id": "community",
-      "name": "社区论坛",
-      "icon": "👥",
-      "order": 6,
-      "sites": [
-        {
-          "id": "stackoverflow",
-          "name": "Stack Overflow",
-          "url": "https://stackoverflow.com",
-          "description": "程序员问答社区",
-          "icon": "/sitelogo/stackoverflow.com.ico"
-        },
-        {
-          "id": "linuxdo",
-          "name": "Linux.do",
-          "url": "https://linux.do",
-          "description": "Linux与开源技术社区",
-          "icon": "/sitelogo/linux.do.ico"
-        },
-        {
-          "id": "nodeseek",
-          "name": "NodeSeek",
-          "url": "https://www.nodeseek.com",
-          "description": "极客技术社区",
-          "icon": "/sitelogo/www.nodeseek.com.ico"
-        },
-        {
-          "id": "v2ex",
-          "name": "V2EX",
-          "url": "https://www.v2ex.com",
-          "description": "创意工作者社区",
-          "icon": "/sitelogo/www.v2ex.com.ico"
-        },
-        {
-          "id": "52pojie",
-          "name": "吾爱破解",
-          "url": "https://www.52pojie.cn/",
-          "description": "软件安全与破解技术论坛",
-          "icon": "/sitelogo/www.52pojie.cn.ico"
-        }
-      ]
-    },
-    {
-      "id": "design",
+      "id": "design-tools",
       "name": "设计工具",
       "icon": "🎨",
-      "order": 4,
+      "order": 7,
       "sites": [
         {
           "id": "figma",
           "name": "Figma",
           "url": "https://figma.com",
-          "description": "UI设计工具",
+          "description": "协作设计工具",
           "icon": "/sitelogo/figma.com.ico"
-        },
-        {
-          "id": "sketch",
-          "name": "Sketch",
-          "url": "https://www.sketch.com",
-          "description": "界面设计工具",
-          "icon": "/sitelogo/www.sketch.com.ico"
         },
         {
           "id": "canva",
@@ -264,93 +448,156 @@ export const mockData = {
           "icon": "/sitelogo/www.canva.com.ico"
         },
         {
-          "id": "adobe-xd",
-          "name": "Adobe XD",
-          "url": "https://www.adobe.com/products/xd.html",
-          "description": "用户体验设计工具",
+          "id": "adobe-creative",
+          "name": "Adobe Creative Cloud",
+          "url": "https://www.adobe.com/creativecloud.html",
+          "description": "Adobe创意套件",
           "icon": "/sitelogo/www.adobe.com.ico"
+        },
+        {
+          "id": "sketch",
+          "name": "Sketch",
+          "url": "https://www.sketch.com",
+          "description": "Mac设计工具",
+          "icon": "/sitelogo/www.sketch.com.ico"
+        },
+        {
+          "id": "dribbble",
+          "name": "Dribbble",
+          "url": "https://dribbble.com",
+          "description": "设计师作品展示",
+          "icon": "/sitelogo/dribbble.com.ico"
+        },
+        {
+          "id": "behance",
+          "name": "Behance",
+          "url": "https://www.behance.net",
+          "description": "创意作品平台",
+          "icon": "/sitelogo/www.behance.net.ico"
+        },
+        {
+          "id": "unsplash",
+          "name": "Unsplash",
+          "url": "https://unsplash.com",
+          "description": "免费高质量图片",
+          "icon": "/sitelogo/unsplash.com.ico"
+        },
+        {
+          "id": "pexels",
+          "name": "Pexels",
+          "url": "https://www.pexels.com",
+          "description": "免费图片和视频",
+          "icon": "/sitelogo/www.pexels.com.ico"
         }
       ]
     },
     {
-      "id": "finance",
-      "name": "财经投资",
-      "icon": "💰",
-      "order": 5,
+      "id": "productivity",
+      "name": "效率工具",
+      "icon": "⚡",
+      "order": 8,
       "sites": [
         {
-          "id": "binance",
-          "name": "币安",
-          "url": "https://www.binance.com",
-          "description": "加密货币交易平台",
-          "icon": "/sitelogo/www.binance.com.ico"
+          "id": "notion",
+          "name": "Notion",
+          "url": "https://www.notion.so",
+          "description": "全能工作空间",
+          "icon": "/sitelogo/www.notion.so.ico"
         },
         {
-          "id": "okx",
-          "name": "OKX",
-          "url": "https://www.okx.com",
-          "description": "数字资产交易服务平台",
-          "icon": "/sitelogo/www.okx.com.ico"
+          "id": "obsidian",
+          "name": "Obsidian",
+          "url": "https://obsidian.md",
+          "description": "知识管理工具",
+          "icon": "/sitelogo/obsidian.md.ico"
         },
         {
-          "id": "bitget",
-          "name": "Bitget",
-          "url": "https://www.bitget.com",
-          "description": "全球化数字资产交易服务商",
-          "icon": "/sitelogo/www.bitget.com.ico"
+          "id": "trello",
+          "name": "Trello",
+          "url": "https://trello.com",
+          "description": "项目管理工具",
+          "icon": "/sitelogo/trello.com.ico"
         },
         {
-          "id": "tradingview",
-          "name": "TradingView",
-          "url": "https://cn.tradingview.com",
-          "description": "专业金融图表和交易平台",
-          "icon": "/sitelogo/cn.tradingview.com.ico"
+          "id": "asana",
+          "name": "Asana",
+          "url": "https://asana.com",
+          "description": "团队协作管理",
+          "icon": "/sitelogo/asana.com.ico"
         },
         {
-          "id": "tonghuashun",
-          "name": "同花顺",
-          "url": "https://www.10jqka.com.cn",
-          "description": "专业股票软件及金融信息服务",
-          "icon": "/sitelogo/www.10jqka.com.cn.ico"
+          "id": "slack",
+          "name": "Slack",
+          "url": "https://slack.com",
+          "description": "团队沟通工具",
+          "icon": "/sitelogo/slack.com.ico"
         },
         {
-          "id": "xueqiu",
-          "name": "雪球",
-          "url": "https://xueqiu.com",
-          "description": "聪明的投资者都在这里",
-          "icon": "/sitelogo/xueqiu.com.ico"
+          "id": "zoom",
+          "name": "Zoom",
+          "url": "https://zoom.us",
+          "description": "视频会议平台",
+          "icon": "/sitelogo/zoom.us.ico"
         },
         {
-          "id": "coinbase",
-          "name": "Coinbase",
-          "url": "https://www.coinbase.com",
-          "description": "美国合规加密货币交易平台",
-          "icon": "/sitelogo/www.coinbase.com.ico"
+          "id": "google-workspace",
+          "name": "Google Workspace",
+          "url": "https://workspace.google.com",
+          "description": "Google办公套件",
+          "icon": "/sitelogo/workspace.google.com.ico"
         },
         {
-          "id": "futu",
-          "name": "富途牛牛",
-          "url": "https://www.futunn.com",
-          "description": "港美股交易软件",
-          "icon": "/sitelogo/www.futunn.com.ico"
+          "id": "microsoft-365",
+          "name": "Microsoft 365",
+          "url": "https://www.office.com",
+          "description": "微软办公套件",
+          "icon": "/sitelogo/www.office.com.ico"
         }
       ]
     },
     {
       "id": "learning",
-      "name": "学习资源",
+      "name": "学习教育",
       "icon": "📚",
-      "order": 6,
+      "order": 9,
       "sites": [
+        {
+          "id": "coursera",
+          "name": "Coursera",
+          "url": "https://www.coursera.org",
+          "description": "在线课程平台",
+          "icon": "/sitelogo/www.coursera.org.ico"
+        },
+        {
+          "id": "edx",
+          "name": "edX",
+          "url": "https://www.edx.org",
+          "description": "免费在线课程",
+          "icon": "/sitelogo/www.edx.org.ico"
+        },
+        {
+          "id": "udemy",
+          "name": "Udemy",
+          "url": "https://www.udemy.com",
+          "description": "在线学习平台",
+          "icon": "/sitelogo/www.udemy.com.ico"
+        },
+        {
+          "id": "khan-academy",
+          "name": "Khan Academy",
+          "url": "https://www.khanacademy.org",
+          "description": "免费在线教育",
+          "icon": "/sitelogo/www.khanacademy.org.ico"
+        },
         {
           "id": "mdn",
           "name": "MDN Web Docs",
           "url": "https://developer.mozilla.org",
-          "description": "Web开发权威文档",
+          "description": "Web开发文档",
           "icon": "/sitelogo/developer.mozilla.org.ico"
         },
         {
-          "id": "w3school",
+          "id": "w3schools",
           "name": "W3Schools",
           "url": "https://www.w3schools.com",
           "description": "Web技术教程",
@@ -364,122 +611,14 @@ export const mockData = {
           "icon": "/sitelogo/www.runoob.com.ico"
         },
         {
-          "id": "coursera",
-          "name": "Coursera",
-          "url": "https://www.coursera.org",
-          "description": "在线课程平台",
-          "icon": "/sitelogo/www.coursera.org.ico"
-        }
-      ]
-    },
-    {
-      "id": "tools",
-      "name": "在线工具",
-      "icon": "⚙️",
-      "order": 7,
-      "sites": [
-        {
-          "id": "json-formatter",
-          "name": "JSON Formatter",
-          "url": "https://jsonformatter.org",
-          "description": "JSON格式化工具",
-          "icon": "/sitelogo/jsonformatter.org.ico"
-        },
-        {
-          "id": "regex101",
-          "name": "Regex101",
-          "url": "https://regex101.com",
-          "description": "正则表达式测试",
-          "icon": "/sitelogo/regex101.com.ico"
-        },
-        {
-          "id": "caniuse",
-          "name": "Can I Use",
-          "url": "https://caniuse.com",
-          "description": "浏览器兼容性查询",
-          "icon": "/sitelogo/caniuse.com.ico"
-        },
-        {
-          "id": "tinypng",
-          "name": "TinyPNG",
-          "url": "https://tinypng.com",
-          "description": "图片压缩工具",
-          "icon": "/sitelogo/tinypng.com.ico"
-        }
-      ]
-    },
-    {
-      "id": "entertainment",
-      "name": "娱乐休闲",
-      "icon": "🎮",
-      "order": 8,
-      "sites": [
-        {
-          "id": "bilibili",
-          "name": "哔哩哔哩",
-          "url": "https://www.bilibili.com",
-          "description": "弹幕视频网站",
-          "icon": "/sitelogo/www.bilibili.com.ico"
-        },
-        {
-          "id": "youtube",
-          "name": "YouTube",
-          "url": "https://www.youtube.com",
-          "description": "视频分享平台",
-          "icon": "/sitelogo/www.youtube.com.ico"
-        },
-        {
-          "id": "douban",
-          "name": "豆瓣",
-          "url": "https://www.douban.com",
-          "description": "文艺生活社区",
-          "icon": "/sitelogo/www.douban.com.ico"
-        },
-        {
-          "id": "zhihu",
-          "name": "知乎",
-          "url": "https://www.zhihu.com",
-          "description": "知识问答社区",
-          "icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82A7.65 7.65 0 018 4.58c.68.003 1.36.092 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z'/%3E%3C/svg%3E"
-        }
-      ]
-    },
-    {
-      "id": "office",
-      "name": "办公协作",
-      "icon": "💼",
-      "order": 9,
-      "sites": [
-        {
-          "id": "notion",
-          "name": "Notion",
-          "url": "https://www.notion.so",
-          "description": "全能工作空间",
-          "icon": "/sitelogo/www.notion.so.ico"
-        },
-        {
-          "id": "slack",
-          "name": "Slack",
-          "url": "https://slack.com",
-          "description": "团队协作工具",
-          "icon": "/sitelogo/slack.com.ico"
-        },
-        {
-          "id": "trello",
-          "name": "Trello",
-          "url": "https://trello.com",
-          "description": "项目管理工具",
-          "icon": "/sitelogo/trello.com.ico"
-        },
-        {
-          "id": "feishu",
-          "name": "飞书",
-          "url": "https://www.feishu.cn",
-          "description": "企业协作平台",
-          "icon": "/sitelogo/www.feishu.cn.ico"
+          "id": "leetcode",
+          "name": "LeetCode",
+          "url": "https://leetcode.com",
+          "description": "算法练习平台",
+          "icon": "/sitelogo/leetcode.com.ico"
         }
       ]
     }
   ],
-  "title": "搓澡巾导航站"
+  "title": "猫猫导航站"
 }

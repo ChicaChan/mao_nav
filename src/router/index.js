@@ -11,6 +11,14 @@ const router = createRouter({
       component: NavHomeView,
     },
     {
+      path: '/demo',
+      name: 'demo',
+      component: () => import('../views/SimpleDemoView.vue'),
+      meta: {
+        title: '新功能演示 - 猫猫导航'
+      }
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),

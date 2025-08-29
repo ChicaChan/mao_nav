@@ -62,7 +62,12 @@
             📊 统计
           </button>
         </div>
-        <!-- 新功能演示链接已隐藏 -->
+        <router-link to="/demo" class="demo-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          新功能演示
+        </router-link>
       </div>
     </aside>
 
@@ -151,11 +156,13 @@
                   <p class="site-description">{{ site.description }}</p>
                 </div>
                 <div class="site-actions">
-                  <FavoriteButton 
-                    :is-favorited="userStore.isFavorited(site.id)"
-                    @toggle="addToFavorites(site)"
-                    @click.stop
-                  />
+                  <button 
+                    @click.stop="addToFavorites(site)" 
+                    class="action-btn favorite-btn"
+                    title="添加到收藏"
+                  >
+                    ⭐
+                  </button>
                 </div>
               </div>
             </div>
@@ -241,8 +248,17 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useNavigation } from '@/apis/useNavigation.js'
 import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
+import EnhancedSearchBox from '@/components/EnhancedSearchBox.vue'
 import SimpleFavoriteManager from '@/components/SimpleFavoriteManager.vue'
-import FavoriteButton from '@/components/FavoriteButton.vue'
 import { useUserStore } from '@/stores/simpleUserStore.js'
 import { useAnalyticsStore } from '@/stores/simpleAnalyticsStore.js'
 // 导入搜索引擎logo图片
@@ -266,6 +282,11 @@ const selectedEngine = ref('bing') // 选中的搜索引擎
 const showMobileMenu = ref(false) // 移动端菜单显示状态
 const showFavorites = ref(false) // 收藏夹侧边栏显示状态
 const showAnalytics = ref(false) // 数据统计侧边栏显示状态
+const allSites = ref([]) // 所有网站数据，用于搜索
+const allSites = ref([]) // 所有网站数据，用于搜索
+const allSites = ref([]) // 所有网站数据，用于搜索
+const allSites = ref([]) // 所有网站数据，用于搜索
+const allSites = ref([]) // 所有网站数据，用于搜索
 const allSites = ref([]) // 所有网站数据，用于搜索
 
 // 锁定功能相关
@@ -425,34 +446,9 @@ const handleInternalFilter = (filteredSites) => {
   console.log('内部过滤结果:', filteredSites)
 }
 
-// 处理图片加载错误，使用默认图标
+// 处理图片加载错误
 const handleImageError = (event) => {
-  const img = event.target
-  const siteName = img.alt || '网站'
-  const firstChar = siteName.charAt(0).toUpperCase()
-  
-  // 创建一个canvas来生成默认图标
-  const canvas = document.createElement('canvas')
-  canvas.width = 32
-  canvas.height = 32
-  const ctx = canvas.getContext('2d')
-  
-  // 设置背景色（基于网站名称生成颜色）
-  const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']
-  const colorIndex = siteName.charCodeAt(0) % colors.length
-  ctx.fillStyle = colors[colorIndex]
-  ctx.fillRect(0, 0, 32, 32)
-  
-  // 绘制文字
-  ctx.fillStyle = 'white'
-  ctx.font = 'bold 16px Arial'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(firstChar, 16, 16)
-  
-  // 将canvas转换为图片
-  img.src = canvas.toDataURL()
-  img.style.borderRadius = '4px'
+  event.target.style.display = 'none'
 }
 
 // 移动端菜单控制
@@ -509,72 +505,61 @@ const closeSidebars = () => {
   showAnalytics.value = false
 }
 
-// 切换收藏状态
+// 添加到收藏夹
 const addToFavorites = (site) => {
-  const isCurrentlyFavorited = userStore.isFavorited(site.id)
+  const success = userStore.addFavorite({
+    id: site.id,
+    name: site.name,
+    url: site.url,
+    icon: site.icon,
+    description: site.description,
+    category: site.category || '未分类'
+  })
   
-  if (isCurrentlyFavorited) {
-    // 取消收藏
-    userStore.removeFavorite(site.id)
-    showToast(`已取消收藏 ${site.name}`, 'info')
-  } else {
-    // 添加收藏
-    const success = userStore.addFavorite({
-      id: site.id,
-      name: site.name,
-      url: site.url,
-      icon: site.icon,
-      description: site.description,
-      category: site.category || '未分类'
-    })
+  if (success) {
+    // 创建一个临时的成功提示元素
+    const toast = document.createElement('div')
+    toast.textContent = `已收藏 ${site.name}`
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      font-size: 14px;
+      animation: slideIn 0.3s ease;
+    `
+    document.body.appendChild(toast)
     
-    if (success) {
-      showToast(`已收藏 ${site.name}`, 'success')
-    } else {
-      showToast(`收藏失败，请重试`, 'error')
-    }
-  }
-}
-
-// 显示提示消息的通用函数
-const showToast = (message, type = 'info') => {
-  const toast = document.createElement('div')
-  toast.textContent = message
-  
-  const colors = {
-    success: '#4CAF50',
-    info: '#2196F3', 
-    warning: '#FF9800',
-    error: '#f44336'
-  }
-  
-  toast.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: ${colors[type] || colors.info};
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 10000;
-    font-size: 14px;
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
-    word-wrap: break-word;
-  `
-  
-  document.body.appendChild(toast)
-  
-  // 3秒后移除提示
-  setTimeout(() => {
-    toast.style.animation = 'slideOut 0.3s ease'
+    // 3秒后移除提示
     setTimeout(() => {
-      if (document.body.contains(toast)) {
-        document.body.removeChild(toast)
-      }
-    }, 300)
-  }, 2500)
+      toast.style.animation = 'slideOut 0.3s ease'
+      setTimeout(() => document.body.removeChild(toast), 300)
+    }, 2000)
+  } else {
+    // 已经收藏过的提示
+    const toast = document.createElement('div')
+    toast.textContent = `${site.name} 已在收藏夹中`
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #FF9800;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      font-size: 14px;
+    `
+    document.body.appendChild(toast)
+    
+    setTimeout(() => document.body.removeChild(toast), 2000)
+  }
 }
 
 // 访问网站并记录
@@ -607,7 +592,157 @@ const recordVisit = (site) => {
 
 
 
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
 
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
+
+// 处理外部搜索
+const handleExternalSearch = (query, engine) => {
+  if (query.trim()) {
+    const searchEngineUrls = {
+      google: 'https://www.google.com/search?q=',
+      baidu: 'https://www.baidu.com/s?wd=',
+      bing: 'https://www.bing.com/search?q=',
+      duckduckgo: 'https://duckduckgo.com/?q='
+    }
+    const searchUrl = searchEngineUrls[engine] + encodeURIComponent(query)
+    window.open(searchUrl, '_blank')
+  }
+}
+
+// 处理内部过滤
+const handleInternalFilter = (filteredSites) => {
+  console.log('内部过滤结果:', filteredSites)
+}
 
 // 组件挂载时获取数据
 onMounted(() => {
