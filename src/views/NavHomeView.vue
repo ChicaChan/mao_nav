@@ -28,86 +28,92 @@
 
   <!-- 正常导航界面 -->
   <div v-else class="nav-home">
-    <!-- 左侧边栏 -->
-    <aside class="sidebar">
-      <!-- Logo区域 -->
-      <div class="logo-section">
-        <img src="/logo.png" alt="logo" class="logo" />
-        <h1 class="site-title">{{ title || '猫猫导航' }}</h1>
-      </div>
+    <!-- 现代化顶部导航栏 -->
+    <header class="modern-header glass-effect animate-slide-in-up">
+      <div class="header-content">
+        <!-- Logo区域 -->
+        <div class="logo-section animate-fade-in">
+          <img src="/logo.png" alt="logo" class="modern-logo animate-float" />
+          <h1 class="site-title">{{ title || '猫猫导航' }}</h1>
+        </div>
 
-      <!-- 分类导航 -->
-      <nav class="category-nav">
-        <h2 class="nav-title">分类导航</h2>
-                <ul class="category-list">
+        <!-- 中央搜索区域 -->
+        <div class="search-center animate-scale-in">
+          <EnhancedSearchBox
+            :all-sites="allSites"
+            @external-search="handleExternalSearch"
+            @internal-filter="handleInternalFilter"
+          />
+        </div>
+
+        <!-- 快捷操作区 -->
+        <div class="quick-actions animate-slide-in-right">
+          <button @click="toggleFavorites" class="action-btn glass-effect" title="我的收藏">
+            <span class="action-icon">⭐</span>
+            <span class="action-text">收藏</span>
+          </button>
+          <button @click="toggleAnalytics" class="action-btn glass-effect" title="数据统计">
+            <span class="action-icon">📊</span>
+            <span class="action-text">统计</span>
+          </button>
+          <button class="action-btn glass-effect" title="切换主题">
+            <span class="action-icon">🌙</span>
+            <span class="action-text">主题</span>
+          </button>
+        </div>
+
+        <!-- 移动端菜单按钮 -->
+        <button class="mobile-menu-btn glass-effect" @click="toggleMobileMenu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 悬浮分类导航 -->
+    <nav class="floating-nav glass-effect animate-slide-in-right">
+      <div class="nav-header">
+        <h3 class="nav-title">分类</h3>
+      </div>
+      <ul class="category-list">
+        <li
+          v-for="category in categories"
+          :key="category.id"
+          class="category-item animate-pulse-glow"
+          @click="scrollToCategory(category.id)"
+        >
+          <span class="category-icon">{{ category.icon }}</span>
+          <span class="category-name">{{ category.name }}</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 移动端分类菜单 -->
+      <div class="mobile-menu glass-effect" :class="{ active: showMobileMenu }">
+        <div class="mobile-menu-header">
+          <div class="header-left">
+            <h3>分类导航</h3>
+          </div>
+          <button class="close-btn" @click="closeMobileMenu">×</button>
+        </div>
+        <ul class="mobile-category-list">
           <li
             v-for="category in categories"
             :key="category.id"
-            class="category-item"
-            @click="scrollToCategory(category.id)"
+            class="mobile-category-item"
+            @click="scrollToCategoryMobile(category.id)"
           >
             <span class="category-icon">{{ category.icon }}</span>
             <span class="category-name">{{ category.name }}</span>
           </li>
         </ul>
-      </nav>
-
-      <!-- 左侧边栏底部信息 -->
-      <div class="sidebar-footer">
-        <div class="sidebar-actions">
-          <button @click="toggleFavorites" class="sidebar-action-btn favorites-btn" title="我的收藏">
-            ⭐ 收藏夹
-          </button>
-          <button @click="toggleAnalytics" class="sidebar-action-btn analytics-btn" title="数据统计">
-            📊 统计
-          </button>
-        </div>
-        <!-- 新功能演示链接已隐藏 -->
       </div>
-    </aside>
 
-    <!-- 右侧主内容区 -->
-    <main class="main-content">
-                  <!-- 集成搜索栏 -->
-      <header class="search-header">
-        <EnhancedSearchBox 
-          :all-sites="allSites"
-          @external-search="handleExternalSearch"
-          @internal-filter="handleInternalFilter"
-        />
-
-        <!-- 移动端菜单按钮 -->
-        <button class="mobile-menu-btn" @click="toggleMobileMenu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-
-        <!-- 移动端分类菜单 -->
-        <div class="mobile-menu" :class="{ active: showMobileMenu }">
-          <div class="mobile-menu-header">
-            <div class="header-left">
-              <h3>分类导航</h3>
-              <!-- <img :src="githubLogo" alt="GitHub" class="header-github-icon" @click="openGitHub" /> -->
-            </div>
-            <button class="close-btn" @click="closeMobileMenu">×</button>
-          </div>
-                    <ul class="mobile-category-list">
-            <li
-              v-for="category in categories"
-              :key="category.id"
-              class="mobile-category-item"
-              @click="scrollToCategoryMobile(category.id)"
-            >
-              <span class="category-icon">{{ category.icon }}</span>
-              <span class="category-name">{{ category.name }}</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 移动端菜单遮罩 -->
-        <div class="mobile-menu-overlay" :class="{ active: showMobileMenu }" @click="closeMobileMenu"></div>
-      </header>
+      <!-- 移动端菜单遮罩 -->
+      <div class="mobile-menu-overlay" :class="{ active: showMobileMenu }" @click="closeMobileMenu"></div>
 
       <!-- 导航内容区 -->
       <div class="content-area">
@@ -250,8 +256,8 @@ import googleLogo from '@/assets/goolge.png'
 import baiduLogo from '@/assets/baidu.png'
 import bingLogo from '@/assets/bing.png'
 import duckLogo from '@/assets/duck.png'
-// 导入GitHub logo
-import githubLogo from '@/assets/github.png'
+// 导入GitHub logo (暂时保留，后续可能使用)
+// import githubLogo from '@/assets/github.png'
 
 // 使用导航API
 const { categories, title, loading, error, fetchCategories } = useNavigation()
@@ -397,14 +403,13 @@ const handleUnlock = async () => {
   }
 }
 
-// 处理搜索
-const handleSearch = () => {
-  if (!searchQuery.value.trim()) return
-
-  const engine = searchEngines[selectedEngine.value]
-  const url = engine.url + encodeURIComponent(searchQuery.value)
-  window.open(url, '_blank')
-}
+// 处理搜索 (现在由EnhancedSearchBox组件处理)
+// const handleSearch = () => {
+//   if (!searchQuery.value.trim()) return
+//   const engine = searchEngines[selectedEngine.value]
+//   const url = engine.url + encodeURIComponent(searchQuery.value)
+//   window.open(url, '_blank')
+// }
 
 // 处理外部搜索
 const handleExternalSearch = (query, engine) => {
@@ -482,10 +487,10 @@ const scrollToCategoryMobile = (categoryId) => {
   }, 200)
 }
 
-// 打开GitHub项目页面
-const openGitHub = () => {
-  window.open('https://github.com/maodeyu180/mao_nav', '_blank')
-}
+// 打开GitHub项目页面 (暂时保留，后续可能使用)
+// const openGitHub = () => {
+//   window.open('https://github.com/maodeyu180/mao_nav', '_blank')
+// }
 
 // 切换收藏夹显示
 const toggleFavorites = () => {
@@ -593,17 +598,17 @@ const visitSite = (site) => {
   window.open(site.url, '_blank', 'noopener,noreferrer')
 }
 
-// 记录访问（保留原方法以防其他地方使用）
-const recordVisit = (site) => {
-  analyticsStore.recordSiteVisit(site.id, site.name, site.url)
-  userStore.addToHistory({
-    id: site.id,
-    name: site.name,
-    url: site.url,
-    icon: site.icon,
-    visitTime: new Date().toISOString()
-  })
-}
+// 记录访问（保留原方法以防其他地方使用，现在由visitSite函数处理）
+// const recordVisit = (site) => {
+//   analyticsStore.recordSiteVisit(site.id, site.name, site.url)
+//   userStore.addToHistory({
+//     id: site.id,
+//     name: site.name,
+//     url: site.url,
+//     icon: site.icon,
+//     visitTime: new Date().toISOString()
+//   })
+// }
 
 
 
@@ -742,29 +747,186 @@ onUnmounted(() => {
 }
 
 .nav-home {
-  display: flex;
   min-height: 100vh;
-  background-color: #f5f7fa;
-}
-
-/* 左侧边栏样式 */
-.sidebar {
-  width: 280px;
-  background-color: #2c3e50;
-  color: white;
-  padding: 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  height: 100vh;
-  overflow: hidden;
-  flex-shrink: 0;
+  background: var(--bg-gradient);
   position: relative;
+  overflow-x: hidden;
 }
 
+/* 现代化顶部导航栏 */
+.modern-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: var(--space-lg);
+}
+
+/* Logo区域现代化 */
 .logo-section {
   display: flex;
   align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.modern-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.modern-logo:hover {
+  transform: scale(1.05) rotate(5deg);
+}
+
+.site-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 中央搜索区域 */
+.search-center {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 var(--space-lg);
+}
+
+/* 快捷操作区 */
+.quick-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--glass-effect);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+}
+
+.action-icon {
+  font-size: 1rem;
+}
+
+.action-text {
+  font-weight: 600;
+}
+
+/* 悬浮分类导航 */
+.floating-nav {
+  position: fixed;
+  top: 50%;
+  right: var(--space-lg);
+  transform: translateY(-50%);
+  z-index: 900;
+  width: 240px;
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.floating-nav:hover {
+  transform: translateY(-50%) scale(1.02);
+  box-shadow: var(--shadow-glow);
+}
+
+.nav-header {
+  padding: var(--space-lg);
+  background: var(--primary-gradient);
+  color: white;
+  text-align: center;
+}
+
+.nav-header .nav-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.floating-nav .category-list {
+  list-style: none;
+  padding: var(--space-sm);
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.floating-nav .category-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-xs);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.floating-nav .category-item:hover {
+  background: var(--accent-gradient);
+  color: white;
+  transform: translateX(8px);
+  box-shadow: var(--shadow-md);
+}
+
+.floating-nav .category-icon {
+  font-size: 1.25rem;
+  margin-right: var(--space-md);
+  width: 24px;
+  text-align: center;
+}
+
+.floating-nav .category-name {
+  font-size: 0.9rem;
 }
 
 .logo {
@@ -896,13 +1058,13 @@ onUnmounted(() => {
   transform: scale(1.1) rotate(5deg);
 }
 
-/* 右侧主内容区样式 */
+/* 主内容区域现代化 */
 .main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  padding-top: 120px; /* 为固定的导航栏留出空间 */
+  padding-right: 280px; /* 为悬浮导航留出空间 */
+  padding-left: var(--space-xl);
+  padding-bottom: var(--space-3xl);
+  min-height: 100vh;
 }
 
 .search-header {
@@ -1135,10 +1297,9 @@ onUnmounted(() => {
 
 /* 内容区域样式 */
 .content-area {
-  flex: 1;
-  padding: 30px;
-  padding-bottom: 400px;
-  overflow-y: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-2xl) 0;
 }
 
 .loading, .error {
@@ -1146,17 +1307,33 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  color: #7f8c8d;
+  min-height: 300px;
+  color: var(--text-muted);
+  background: var(--glass-effect);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-3xl);
+  margin: var(--space-xl) 0;
+  box-shadow: var(--shadow-lg);
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #ecf0f1;
-  border-top: 4px solid #3498db;
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--glass-border);
+  border-top: 4px solid var(--primary-color);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite, pulse-glow 2s ease-in-out infinite;
+  margin-bottom: var(--space-lg);
+}
+
+.loading p {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 @keyframes spin {
@@ -1164,63 +1341,153 @@ onUnmounted(() => {
   100% { transform: rotate(360deg); }
 }
 
+.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(244, 67, 54, 0.05));
+  border-color: rgba(244, 67, 54, 0.2);
+  color: var(--text-primary);
+}
+
+.error p {
+  font-size: 1.125rem;
+  color: #e57373;
+  margin-bottom: var(--space-lg);
+}
+
 .retry-btn {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: #3498db;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--primary-gradient);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-full);
   cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s var(--ease-out-expo);
+  box-shadow: var(--shadow-md);
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
 }
 
 .categories-container {
   max-width: 1200px;
   margin: 0 auto;
+  scroll-behavior: smooth;
 }
 
 .category-section {
-  margin-bottom: 50px;
+  margin-bottom: var(--space-3xl);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.6s var(--ease-out-expo) forwards;
 }
 
+.category-section:nth-child(1) { animation-delay: 0.1s; }
+.category-section:nth-child(2) { animation-delay: 0.2s; }
+.category-section:nth-child(3) { animation-delay: 0.3s; }
+.category-section:nth-child(4) { animation-delay: 0.4s; }
+.category-section:nth-child(5) { animation-delay: 0.5s; }
+.category-section:nth-child(6) { animation-delay: 0.6s; }
+.category-section:nth-child(7) { animation-delay: 0.7s; }
+.category-section:nth-child(8) { animation-delay: 0.8s; }
+.category-section:nth-child(9) { animation-delay: 0.9s; }
+.category-section:nth-child(10) { animation-delay: 1.0s; }
+
+/* 为每个网站卡片添加延迟动画 */
+.site-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.5s var(--ease-out-expo) forwards;
+}
+
+.site-card:nth-child(1) { animation-delay: 0.1s; }
+.site-card:nth-child(2) { animation-delay: 0.15s; }
+.site-card:nth-child(3) { animation-delay: 0.2s; }
+.site-card:nth-child(4) { animation-delay: 0.25s; }
+.site-card:nth-child(5) { animation-delay: 0.3s; }
+.site-card:nth-child(6) { animation-delay: 0.35s; }
+.site-card:nth-child(7) { animation-delay: 0.4s; }
+.site-card:nth-child(8) { animation-delay: 0.45s; }
+
 .category-title {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  color: #2c3e50;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: var(--space-2xl);
   display: flex;
   align-items: center;
+  position: relative;
+  padding: var(--space-lg) 0;
+  background: var(--glass-effect);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-lg) var(--space-xl);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.category-title:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.category-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-sm);
 }
 
 .category-title .category-icon {
-  font-size: 32px;
-  margin-right: 16px;
+  font-size: 2.5rem;
+  margin-right: var(--space-lg);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
 }
 
 .category-title .category-name {
-  margin-left: 10px;
-  font-size: 26px;
+  font-size: 2rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .sites-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-lg);
+  padding: 0;
 }
 
 .site-card {
   display: flex;
   align-items: center;
-  background: white;
-  border-radius: 8px;
-  padding: 12px;
+  background: var(--glass-effect);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
   text-decoration: none;
   color: inherit;
-  transition: all 0.3s ease;
-  border: 1px solid #e9ecef;
+  transition: all 0.4s var(--ease-in-out-cubic);
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
 }
 
 .site-card::before {
@@ -1230,40 +1497,49 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+  background: var(--accent-gradient);
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  z-index: 0;
 }
 
 .site-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-glow);
+  border-color: var(--accent-color);
 }
 
 .site-card:hover::before {
-  opacity: 1;
+  opacity: 0.1;
 }
 
 .site-icon {
-  width: 36px;
-  height: 36px;
-  margin-right: 12px;
-  border-radius: 6px;
+  width: 48px;
+  height: 48px;
+  margin-right: var(--space-lg);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #f8f9fa;
+  background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.site-card:hover .site-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .site-icon img {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
+  border-radius: var(--radius-md);
 }
 
 .site-info {
@@ -1273,21 +1549,32 @@ onUnmounted(() => {
 }
 
 .site-name {
-  font-size: 15px;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin: 0 0 3px 0;
-  color: #2c3e50;
-  line-height: 1.2;
+  margin: 0 0 var(--space-xs) 0;
+  color: var(--text-primary);
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.site-card:hover .site-name {
+  color: var(--accent-color);
 }
 
 .site-description {
-  font-size: 12px;
-  color: #7f8c8d;
+  font-size: 0.875rem;
+  color: var(--text-muted);
   margin: 0;
-  line-height: 1.3;
-  white-space: nowrap;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.site-card:hover .site-description {
+  color: var(--text-secondary);
 }
 
 /* 页面底部 */
@@ -1614,26 +1901,56 @@ onUnmounted(() => {
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-  .nav-home {
-    flex-direction: column;
-    height: 100vh;
-    height: 100svh; /* 使用动态视口高度 */
-    overflow: hidden;
-  }
-
-  .sidebar {
-    display: none; /* 在移动端隐藏左侧边栏 */
+@media (max-width: 1024px) {
+  .floating-nav {
+    display: none; /* 在平板和移动端隐藏悬浮导航 */
   }
 
   .main-content {
-    flex: 1;
-    height: 100vh;
-    height: 100svh; /* 使用动态视口高度，更准确 */
-    margin-left: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    padding-right: var(--space-xl); /* 移除悬浮导航的空间 */
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-home {
+    overflow-x: hidden;
+  }
+
+  .modern-header {
+    padding: var(--space-md);
+    border-radius: 0;
+  }
+
+  .header-content {
+    gap: var(--space-md);
+  }
+
+  .logo-section .site-title {
+    display: none; /* 移动端隐藏标题 */
+  }
+
+  .search-center {
+    margin: 0;
+  }
+
+  .quick-actions {
+    display: none; /* 移动端隐藏快捷操作 */
+  }
+
+  .mobile-menu-btn {
+    display: flex; /* 显示移动端菜单按钮 */
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+  }
+
+  .main-content {
+    padding-top: 100px;
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
   }
 
   .search-header {
@@ -1662,27 +1979,32 @@ onUnmounted(() => {
   }
 
   .sites-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
 
   .site-card {
-    padding: 12px;
-    flex-direction: column;
-    text-align: center;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
   }
 
   .site-card .site-icon {
-    margin-right: 0;
-    margin-bottom: 8px;
+    width: 40px;
+    height: 40px;
+    margin-right: var(--space-md);
+  }
+
+  .site-card .site-icon img {
+    width: 28px;
+    height: 28px;
   }
 
   .site-card .site-name {
-    font-size: 15px;
+    font-size: 1rem;
   }
 
   .site-card .site-description {
-    font-size: 12px;
+    font-size: 0.8rem;
   }
 
   .category-title {
