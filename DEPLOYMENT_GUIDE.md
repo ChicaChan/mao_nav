@@ -60,6 +60,8 @@ mao_nav/
    - **Install Command**: `npm install`
 4. 点击 Deploy
 
+**注意**：博客管理后台（`/admin/`）仅在本地环境使用，不会部署到线上。详见 `blog/LOCAL_ADMIN_GUIDE.md`。
+
 ### 方案 2：Cloudflare Pages 独立部署
 
 #### 1. 部署导航站
