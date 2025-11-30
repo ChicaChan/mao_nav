@@ -6,11 +6,11 @@ import { fontConfig } from "./fontConfig";
 const SITE_LANG = "zh_CN";
 
 export const siteConfig: SiteConfig = {
-  title: "猫猫技术博客",
-  subtitle: "幽浮喵的技术分享空间",
+  title: "搓澡巾技术博客",
+  subtitle: "搓澡巾的技术分享空间",
   site_url: "https://blog.example.com",
   description:
-    "猫猫技术博客是一个专注于前端开发、Vue 生态、TypeScript 和现代 Web 技术的个人技术博客。分享实战经验、最佳实践和技术心得，与你一起成长。",
+    "搓澡巾技术博客是一个专注于前端开发、Vue 生态、TypeScript 和现代 Web 技术的个人技术博客。分享实战经验、最佳实践和技术心得，与你一起成长。",
   keywords: [
     "前端开发",
     "Vue",
@@ -46,9 +46,9 @@ export const siteConfig: SiteConfig = {
   navbarLogo: {
     type: "icon",
     value: "material-symbols:home-pin-outline",
-    alt: "🐱",
+    alt: "🧽",
   },
-  navbarTitle: "猫猫技术博客", // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
+  navbarTitle: "搓澡巾技术博客", // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
 
   // 站点开始日期，用于统计运行天数
   siteStartDate: "2024-01-01", // 请修改为你的站点实际开始日期，格式：YYYY-MM-DD
