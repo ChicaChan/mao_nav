@@ -28,3 +28,6 @@ coverage
 *.sw?
 *.env
 *.tsbuildinfo
+
+# 博客管理后台（仅本地使用，不部署到线上）
+blog/src/pages/admin.astro
