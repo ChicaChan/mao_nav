@@ -6,7 +6,6 @@ export { siteConfig } from "./siteConfig"; // 站点基础配置
 export { profileConfig } from "./profileConfig"; // 用户资料配置
 
 // 功能配置
-export { commentConfig } from "./commentConfig"; // 评论系统配置
 export { announcementConfig } from "./announcementConfig"; // 公告配置
 export { licenseConfig } from "./licenseConfig"; // 许可证配置
 export { footerConfig } from "./footerConfig"; // 页脚配置
@@ -32,7 +31,6 @@ export { sponsorConfig } from "./sponsorConfig"; // 赞助配置
 export type {
   SiteConfig,
   ProfileConfig,
-  CommentConfig,
   AnnouncementConfig,
   LicenseConfig,
   FooterConfig,
