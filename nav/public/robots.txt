@@ -1,0 +1,17 @@
+# robots.txt for 猫猫导航 & 技术博客
+
+User-agent: *
+Allow: /
+Allow: /blog
+Allow: /blog/*
+
+# 禁止爬取管理后台
+Disallow: /admin
+Disallow: /admin/*
+
+# 禁止爬取测试页面
+Disallow: /test
+Disallow: /demo
+
+# Sitemap
+Sitemap: https://your-domain.com/sitemap.xml
