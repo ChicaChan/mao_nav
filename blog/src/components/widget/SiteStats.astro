@@ -31,11 +31,11 @@ for (const post of posts) {
       .replace(/\s+/g, ' ') // 合并空白
       .trim();
     
-    // 分别计算中文字符和英文单词
+    // 分别计算中文字符和英文字符
     const chineseChars = text.match(/[\u4e00-\u9fa5]/g) || [];
-    const englishWords = text.match(/[a-zA-Z]+/g) || [];
-    
-    totalWords += chineseChars.length + englishWords.length;
+    const englishChars = text.match(/[a-zA-Z]/g) || [];
+
+    totalWords += chineseChars.length + englishChars.length;
   }
 }
 
