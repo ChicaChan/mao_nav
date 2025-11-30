@@ -112,7 +112,7 @@ export const siteConfig: SiteConfig = {
         // 主页显示自定义文本（全局开关）
         enable: true,
         // 主页横幅主标题
-        title: "Lovely firefly!",
+        title: "为路途留灯影",
         // 主页横幅副标题
         subtitle: [
           "In Reddened Chrysalis, I Once Rest",
