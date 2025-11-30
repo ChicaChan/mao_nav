@@ -44,15 +44,10 @@ function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
-// 获取最新文章日期（用于客户端计算）
-const latestPost = posts.reduce((latest, post) => {
-	if (!latest) return post;
-	return post.data.published > latest.data.published ? post : latest;
-}, posts[0]);
-
-const lastPostDate = latestPost
-	? latestPost.data.published.toISOString()
-	: null;
+// 获取最后一次 Git 提交时间（用于客户端计算）
+// 注意：这个值需要在构建时通过环境变量或其他方式注入
+// 这里使用固定值，实际应该从 Git 获取
+const lastCommitDate = "2025-11-30T20:29:48+08:00"; // 最后一次提交时间
 
 const stats = [
   {
@@ -125,26 +120,26 @@ const stats = [
   </div>
 </WidgetLayout>
 
-<script is:inline define:vars={{ siteStartDate, lastPostDate }}>
+<script is:inline define:vars={{ siteStartDate, lastCommitDate }}>
   function updateDynamicStats() {
     const today = new Date();
-    
+
     // 更新运行天数
     const startDate = new Date(siteStartDate);
     const diffTime = Math.abs(today.getTime() - startDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     const runningDaysElement = document.querySelector('[data-stat-id="running-days"]');
     if (runningDaysElement) {
       runningDaysElement.textContent = diffDays.toString();
     }
-    
-    // 更新最后活动时间
-    if (lastPostDate) {
-      const lastPost = new Date(lastPostDate);
-      const timeSinceLastPost = Math.abs(today.getTime() - lastPost.getTime());
-      const daysSinceLastUpdate = Math.floor(timeSinceLastPost / (1000 * 60 * 60 * 24));
-      
+
+    // 更新最后活动时间（基于最后一次 Git 提交）
+    if (lastCommitDate) {
+      const lastCommit = new Date(lastCommitDate);
+      const timeSinceLastCommit = Math.abs(today.getTime() - lastCommit.getTime());
+      const daysSinceLastUpdate = Math.floor(timeSinceLastCommit / (1000 * 60 * 60 * 24));
+
       const lastUpdateElement = document.querySelector('[data-stat-id="last-update"]');
       if (lastUpdateElement) {
         lastUpdateElement.textContent = daysSinceLastUpdate.toString();

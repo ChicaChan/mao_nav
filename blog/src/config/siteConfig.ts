@@ -51,7 +51,7 @@ export const siteConfig: SiteConfig = {
   navbarTitle: "搓澡巾技术博客", // 导航栏标题，可以设置为与 title 不同的值，如果不设置则使用 title
 
   // 站点开始日期，用于统计运行天数
-  siteStartDate: "2024-01-01", // 请修改为你的站点实际开始日期，格式：YYYY-MM-DD
+  siteStartDate: "2025-07-14", // 项目第一次提交日期
 
   // bangumi配置
   bangumi: {
