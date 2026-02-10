@@ -72,6 +72,17 @@ import { url } from "@/utils/url-utils";
   // 全局变量，防止重复初始化
   window.spineModelInitialized = window.spineModelInitialized || false;
   window.spinePlayerInstance = window.spinePlayerInstance || null;
+  const spineModelState =
+    window.__spineModelState ||
+    (window.__spineModelState = {
+      idleAnimationIntervalId: null,
+      canvasClickTarget: null,
+      canvasClickHandler: null,
+      listenersBound: false,
+      swupHookBound: false,
+      domContentLoadedHandler: null,
+      resizeTimeoutId: null,
+    });
 
   // 消息显示函数 - 使用公共消息框组件
   function showMessage(message) {
@@ -110,6 +121,22 @@ import { url } from "@/utils/url-utils";
     if (window.clearModelMessage) {
       window.clearModelMessage();
     }
+
+    if (spineModelState.idleAnimationIntervalId) {
+      clearInterval(spineModelState.idleAnimationIntervalId);
+      spineModelState.idleAnimationIntervalId = null;
+    }
+
+    if (spineModelState.canvasClickTarget && spineModelState.canvasClickHandler) {
+      spineModelState.canvasClickTarget.removeEventListener(
+        "click",
+        spineModelState.canvasClickHandler,
+      );
+    }
+
+    spineModelState.canvasClickTarget = null;
+    spineModelState.canvasClickHandler = null;
+    isClickProcessing = false;
 
     // 清理现有的播放器实例
     if (window.spinePlayerInstance) {
@@ -261,7 +288,15 @@ import { url } from "@/utils/url-utils";
               "#spine-player-container canvas"
             );
             if (canvas) {
-              canvas.addEventListener("click", () => {
+              if (spineModelState.canvasClickTarget && spineModelState.canvasClickHandler) {
+                spineModelState.canvasClickTarget.removeEventListener(
+                  "click",
+                  spineModelState.canvasClickHandler,
+                );
+              }
+
+              spineModelState.canvasClickTarget = canvas;
+              spineModelState.canvasClickHandler = () => {
                 // 防抖处理：防止重复点击
                 const currentTime = Date.now();
                 if (isClickProcessing || currentTime - lastClickTime < 500) {
@@ -309,11 +344,18 @@ import { url } from "@/utils/url-utils";
                 setTimeout(() => {
                   isClickProcessing = false;
                 }, 500);
-              });
+              };
+
+              canvas.addEventListener("click", spineModelState.canvasClickHandler);
+
+              if (spineModelState.idleAnimationIntervalId) {
+                clearInterval(spineModelState.idleAnimationIntervalId);
+                spineModelState.idleAnimationIntervalId = null;
+              }
 
               // 设置待机动画循环
               if (spineModelConfig.interactive.idleAnimations.length > 1) {
-                setInterval(() => {
+                spineModelState.idleAnimationIntervalId = setInterval(() => {
                   try {
                     const idleAnims =
                       spineModelConfig.interactive.idleAnimations;
@@ -332,6 +374,7 @@ import { url } from "@/utils/url-utils";
         },
         error: (_player, reason) => {
           console.error("❌ Spine model loading error:", reason);
+          window.spineModelInitialized = false;
 
           const errorDiv = document.getElementById("spine-error");
           if (errorDiv) {
@@ -367,11 +410,38 @@ import { url } from "@/utils/url-utils";
     }
   }
 
-  // 监听页面卸载事件，清理资源
-  window.addEventListener("beforeunload", cleanupSpineModel);
+  if (!spineModelState.listenersBound) {
+    spineModelState.listenersBound = true;
+
+    // 监听页面卸载事件，清理资源
+    window.addEventListener("beforeunload", cleanupSpineModel);
+
+    // 监听 popstate 事件（浏览器前进后退）
+    window.addEventListener("popstate", () => {
+      setTimeout(() => {
+        updateResponsiveDisplay();
+      }, 100);
+    });
+
+    // 监听窗口大小变化
+    window.addEventListener("resize", () => {
+      if (spineModelState.resizeTimeoutId) {
+        clearTimeout(spineModelState.resizeTimeoutId);
+      }
+
+      spineModelState.resizeTimeoutId = setTimeout(() => {
+        updateResponsiveDisplay();
+      }, 100);
+    });
+  }
 
   // 监听 Swup 页面切换事件（如果使用了 Swup）
-  if (typeof window.swup !== "undefined" && window.swup.hooks) {
+  if (
+    typeof window.swup !== "undefined" &&
+    window.swup.hooks &&
+    !spineModelState.swupHookBound
+  ) {
+    spineModelState.swupHookBound = true;
     window.swup.hooks.on("content:replace", () => {
       // 只更新响应式显示，不重新创建模型
       setTimeout(() => {
@@ -380,19 +450,19 @@ import { url } from "@/utils/url-utils";
     });
   }
 
-  // 监听 popstate 事件（浏览器前进后退）
-  window.addEventListener("popstate", () => {
-    setTimeout(() => {
-      updateResponsiveDisplay();
-    }, 100);
-  });
-
-  // 监听窗口大小变化
-  window.addEventListener("resize", updateResponsiveDisplay);
-
   // 页面加载完成后初始化（只初始化一次）
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSpineModel);
+    if (!spineModelState.domContentLoadedHandler) {
+      spineModelState.domContentLoadedHandler = () => {
+        initSpineModel();
+        spineModelState.domContentLoadedHandler = null;
+      };
+      document.addEventListener(
+        "DOMContentLoaded",
+        spineModelState.domContentLoadedHandler,
+        { once: true },
+      );
+    }
   } else {
     initSpineModel();
   }

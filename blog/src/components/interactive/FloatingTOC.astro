@@ -255,6 +255,18 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
 <script>
   import { TOCManager, isPostPage } from "@/utils/tocUtils";
 
+  const floatingTocState =
+    window.__floatingTocState ||
+    (window.__floatingTocState = {
+      autoCloseBound: false,
+      routeListenersBound: false,
+      tocContentClickHandler: null,
+      resizeTimeout: null,
+      historyPatched: false,
+      originalPushState: null,
+      originalReplaceState: null,
+    });
+
   // 从 data 属性读取配置
   const wrapper = document.querySelector('.floating-toc-wrapper');
   const isSidebarTocEnabled = wrapper?.getAttribute('data-is-sidebar-toc-enabled') === 'true';
@@ -294,6 +306,11 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
 
   // 设置自动关闭功能
   function setupAutoClose() {
+    if (floatingTocState.autoCloseBound) {
+      return;
+    }
+    floatingTocState.autoCloseBound = true;
+
     // 监听页面卸载和隐藏
     window.addEventListener("beforeunload", closeTOC);
     window.addEventListener("pagehide", closeTOC);
@@ -333,18 +350,21 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
     });
 
     // 拦截 history API
-    const originalPushState = history.pushState;
-    const originalReplaceState = history.replaceState;
+    if (!floatingTocState.historyPatched) {
+      floatingTocState.historyPatched = true;
+      floatingTocState.originalPushState = history.pushState.bind(history);
+      floatingTocState.originalReplaceState = history.replaceState.bind(history);
 
-    history.pushState = function (...args) {
-      closeTOC();
-      return originalPushState.apply(this, args);
-    };
+      history.pushState = function (...args) {
+        closeTOC();
+        return floatingTocState.originalPushState(...args);
+      };
 
-    history.replaceState = function (...args) {
-      closeTOC();
-      return originalReplaceState.apply(this, args);
-    };
+      history.replaceState = function (...args) {
+        closeTOC();
+        return floatingTocState.originalReplaceState(...args);
+      };
+    }
   }
 
   // 检查是否应该显示悬浮目录
@@ -410,13 +430,27 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
       // 设置点击事件 - 标记为 TOC 内部导航
       const tocContent = document.getElementById("floating-toc-content");
       if (tocContent) {
-        tocContent.addEventListener("click", (e) => {
+        if (floatingTocState.tocContentClickHandler) {
+          tocContent.removeEventListener(
+            "click",
+            floatingTocState.tocContentClickHandler,
+            { capture: true },
+          );
+        }
+
+        floatingTocState.tocContentClickHandler = (e) => {
           const target = e.target as Element | null;
           const anchor = target?.closest('a[href^="#"]');
           if (anchor) {
             window.tocInternalNavigation = true;
           }
-        }, { capture: true });
+        };
+
+        tocContent.addEventListener(
+          "click",
+          floatingTocState.tocContentClickHandler,
+          { capture: true },
+        );
       }
 
       // 设置自动关闭
@@ -430,32 +464,36 @@ const isSidebarTocEnabled = sidebarTocComponent?.enable ?? false;
   initFloatingTOC();
 
   // 监听页面切换事件
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && !floatingTocState.routeListenersBound) {
+    floatingTocState.routeListenersBound = true;
+
     // Swup 路由切换
     document.addEventListener("swup:contentReplaced", () => {
       setTimeout(initFloatingTOC, 100);
     });
-    
+
     // Astro 页面切换事件
     document.addEventListener("astro:page-load", () => {
       setTimeout(initFloatingTOC, 100);
     });
-    
+
     // 浏览器导航事件
     window.addEventListener("popstate", () => {
       setTimeout(initFloatingTOC, 200);
     });
 
     // 监听布局模式切换（通过自定义事件）
-    window.addEventListener('layoutChange', () => {
+    window.addEventListener("layoutChange", () => {
       updateFloatingTOCVisibility();
     });
 
     // 监听窗口大小变化
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
+    window.addEventListener("resize", () => {
+      if (floatingTocState.resizeTimeout) {
+        clearTimeout(floatingTocState.resizeTimeout);
+      }
+
+      floatingTocState.resizeTimeout = setTimeout(() => {
         updateFloatingTOCVisibility();
       }, 300);
     });

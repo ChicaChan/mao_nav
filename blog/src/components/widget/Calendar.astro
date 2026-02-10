@@ -277,18 +277,42 @@ const currentLang = siteConfig.lang || "en";
 
   renderCalendar();
 
+  const calendarWidgetState =
+    window.__calendarWidgetState ||
+    (window.__calendarWidgetState = {
+      midnightTimeoutId: null,
+      dailyIntervalId: null,
+      swupHandler: null,
+    });
+
   const now = new Date();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
   const msUntilMidnight = tomorrow.getTime() - now.getTime();
 
-  setTimeout(() => {
+  if (calendarWidgetState.midnightTimeoutId) {
+    clearTimeout(calendarWidgetState.midnightTimeoutId);
+    calendarWidgetState.midnightTimeoutId = null;
+  }
+
+  if (calendarWidgetState.dailyIntervalId) {
+    clearInterval(calendarWidgetState.dailyIntervalId);
+    calendarWidgetState.dailyIntervalId = null;
+  }
+
+  calendarWidgetState.midnightTimeoutId = setTimeout(() => {
     renderCalendar();
-    setInterval(renderCalendar, 24 * 60 * 60 * 1000);
+    calendarWidgetState.dailyIntervalId = setInterval(
+      renderCalendar,
+      24 * 60 * 60 * 1000,
+    );
   }, msUntilMidnight);
 
-  document.addEventListener("swup:contentReplaced", () => {
-    setTimeout(renderCalendar, 100);
-  });
+  if (!calendarWidgetState.swupHandler) {
+    calendarWidgetState.swupHandler = () => {
+      setTimeout(renderCalendar, 100);
+    };
+    document.addEventListener("swup:contentReplaced", calendarWidgetState.swupHandler);
+  }
 </script>
 
 <style>
