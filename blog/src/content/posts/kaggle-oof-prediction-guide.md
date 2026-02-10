@@ -1,8 +1,8 @@
-﻿---
+---
 title: Kaggle 竞赛中的 OOF（Out-of-Fold）预测详解：从验证到 Stacking 的落地方法
 published: 2026-02-10
 description: 面向 Kaggle 入门到进阶选手，系统讲清 OOF 的定义、生成流程、实战代码与常见踩坑，帮助你把离线验证和线上表现对齐。
-tags: [Kaggle, OOF, Out-of-Fold, 交叉验证, Stacking, 机器学习]
+tags: [Kaggle, 机器学习, 模型验证, 模型集成]
 category: 数据科学
 draft: false
 ---

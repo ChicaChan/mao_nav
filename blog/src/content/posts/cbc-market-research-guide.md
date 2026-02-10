@@ -3,7 +3,7 @@ title: CBC市场调研分析深度指南：探索选择基础联合分析的商�
 published: 2026-02-01
 pinned: false
 description: 深入解析CBC（Choice-Based Conjoint）分析方法论，帮助企业在产品开发、定价策略、市场细分等关键商业决策中获得数据驱动的市场洞察。涵盖核心概念、实验设计、数据分析工具及商业应用案例。
-tags: [市场调研, CBC分析, 联合分析, 消费者偏好, 产品开发, 定价策略, 数据分析]
+tags: [市场研究, 数据分析]
 category: 数据科学
 draft: false
 ---
