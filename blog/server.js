@@ -1,260 +1,232 @@
-/**
- * 博客文章管理后端服务
- * 提供本地文件系统操作 API，避免频繁 Git 提交
- */
+import cors from "cors";
+import express from "express";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
-import express from 'express'
-import cors from 'cors'
-import fs from 'fs/promises'
-import path from 'path'
-import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const app = express();
+const PORT = Number(process.env.PORT || 3001);
+const POSTS_DIR = path.join(__dirname, "src", "content", "posts");
+const ADMIN_PASSWORD =
+  process.env.ADMIN_PASSWORD || process.env.VITE_ADMIN_PASSWORD;
 
-const app = express()
-const PORT = 3001
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://localhost:4321",
+  "http://localhost:4322",
+  "http://localhost:4323",
+  "http://localhost:4324",
+];
 
-// 文章目录路径
-const POSTS_DIR = path.join(__dirname, 'src', 'content', 'posts')
+const ALLOWED_ORIGINS = process.env.ADMIN_ALLOWED_ORIGINS
+  ? process.env.ADMIN_ALLOWED_ORIGINS.split(",").map((item) => item.trim())
+  : DEFAULT_ALLOWED_ORIGINS;
 
-// 中间件
-app.use(cors({
-  origin: [
-    'http://localhost:5173', // 允许导航站前端访问
-    'http://localhost:4321', // 允许博客开发服务器访问
-    'http://localhost:4322', // 允许博客开发服务器访问（备用端口）
-    'http://localhost:4323', // 允许博客开发服务器访问（备用端口）
-    'http://localhost:4324'  // 允许博客开发服务器访问（备用端口）
-  ],
-  credentials: true
-}))
-app.use(express.json({ limit: '10mb' }))
+app.use(
+  cors({
+    origin: ALLOWED_ORIGINS,
+    credentials: true,
+  }),
+);
+app.use(express.json({ limit: "10mb" }));
 
-// 日志中间件
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`)
-  next()
-})
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 
-// 简单的认证中间件（可选）
-const authenticate = (req, res, next) => {
-  const password = req.headers['x-admin-password']
-  const expectedPassword = process.env.VITE_ADMIN_PASSWORD
+function sendServerError(res, message, error) {
+  console.error(message, error);
+  res.status(500).json({ error: message });
+}
 
-  if (expectedPassword && password !== expectedPassword) {
-    return res.status(401).json({ error: '未授权访问' })
+function authenticate(req, res, next) {
+  if (!ADMIN_PASSWORD) {
+    return res.status(503).json({ error: "Admin authentication is not configured" });
   }
 
-  next()
+  const password = req.headers["x-admin-password"];
+  if (typeof password !== "string" || password !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  next();
 }
 
-// 验证文件名安全性
-const isValidFilename = (filename) => {
-  // 只允许 .md 文件，且不包含路径遍历字符
-  return filename.endsWith('.md') &&
-         !filename.includes('..') &&
-         !filename.includes('/') &&
-         !filename.includes('\\')
+function isValidFilename(filename) {
+  return (
+    typeof filename === "string" &&
+    filename.endsWith(".md") &&
+    !filename.includes("..") &&
+    !filename.includes("/") &&
+    !filename.includes("\\")
+  );
 }
 
-// ========== API 端点 ==========
-
-// 健康检查
-app.get('/api/health', (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({
-    status: 'ok',
-    message: '博客后端服务运行中',
-    postsDir: POSTS_DIR
-  })
-})
+    status: "ok",
+    message: "Blog backend service is running",
+    authConfigured: Boolean(ADMIN_PASSWORD),
+  });
+});
 
-// 列出所有文章
-app.get('/api/posts', authenticate, async (req, res) => {
+app.get("/api/posts", authenticate, async (req, res) => {
   try {
-    const files = await fs.readdir(POSTS_DIR)
+    const entries = await fs.readdir(POSTS_DIR, { withFileTypes: true });
+    const markdownFiles = entries.filter(
+      (entry) => entry.isFile() && entry.name.endsWith(".md"),
+    );
 
-    // 过滤出 .md 文件，排除目录
-    const posts = []
-
-    for (const file of files) {
-      if (!file.endsWith('.md')) continue
-
-      const filePath = path.join(POSTS_DIR, file)
-      const stats = await fs.stat(filePath)
-
-      if (stats.isFile()) {
-        posts.push({
-          name: file,
-          path: `src/content/posts/${file}`,
+    const posts = await Promise.all(
+      markdownFiles.map(async (entry) => {
+        const filePath = path.join(POSTS_DIR, entry.name);
+        const stats = await fs.stat(filePath);
+        return {
+          name: entry.name,
+          path: `src/content/posts/${entry.name}`,
           size: stats.size,
           mtime: stats.mtime,
-          ctime: stats.ctime
-        })
-      }
-    }
+          ctime: stats.ctime,
+        };
+      }),
+    );
 
-    // 按修改时间倒序排序
-    posts.sort((a, b) => b.mtime - a.mtime)
-
-    res.json({ posts })
+    posts.sort((a, b) => b.mtime - a.mtime);
+    res.json({ posts });
   } catch (error) {
-    console.error('列出文章失败:', error)
-    res.status(500).json({ error: '列出文章失败', message: error.message })
+    sendServerError(res, "Failed to list posts", error);
   }
-})
+});
 
-// 获取单篇文章
-app.get('/api/posts/:filename', authenticate, async (req, res) => {
+app.get("/api/posts/:filename", authenticate, async (req, res) => {
   try {
-    const { filename } = req.params
+    const { filename } = req.params;
 
     if (!isValidFilename(filename)) {
-      return res.status(400).json({ error: '无效的文件名' })
+      return res.status(400).json({ error: "Invalid filename" });
     }
 
-    const filePath = path.join(POSTS_DIR, filename)
-    const content = await fs.readFile(filePath, 'utf-8')
+    const filePath = path.join(POSTS_DIR, filename);
+    const content = await fs.readFile(filePath, "utf-8");
 
     res.json({
       filename,
-      content
-    })
+      content,
+    });
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      return res.status(404).json({ error: '文章不存在' })
+    if (error.code === "ENOENT") {
+      return res.status(404).json({ error: "Post not found" });
     }
-    console.error('获取文章失败:', error)
-    res.status(500).json({ error: '获取文章失败', message: error.message })
+    sendServerError(res, "Failed to read post", error);
   }
-})
+});
 
-// 创建新文章
-app.post('/api/posts', authenticate, async (req, res) => {
+app.post("/api/posts", authenticate, async (req, res) => {
   try {
-    const { filename, content } = req.body
+    const { filename, content } = req.body;
 
     if (!filename || !content) {
-      return res.status(400).json({ error: '缺少必要参数：filename 和 content' })
+      return res
+        .status(400)
+        .json({ error: "Missing required parameters: filename, content" });
     }
 
     if (!isValidFilename(filename)) {
-      return res.status(400).json({ error: '无效的文件名' })
+      return res.status(400).json({ error: "Invalid filename" });
     }
 
-    const filePath = path.join(POSTS_DIR, filename)
+    const filePath = path.join(POSTS_DIR, filename);
 
-    // 检查文件是否已存在
     try {
-      await fs.access(filePath)
-      return res.status(409).json({ error: '文章已存在' })
+      await fs.access(filePath);
+      return res.status(409).json({ error: "Post already exists" });
     } catch {
-      // 文件不存在，可以创建
+      // Continue creating when file does not exist.
     }
 
-    // 写入文件
-    await fs.writeFile(filePath, content, 'utf-8')
+    await fs.writeFile(filePath, content, "utf-8");
 
-    console.log(`✅ 创建文章成功: ${filename}`)
     res.json({
       success: true,
-      message: '文章创建成功',
-      filename
-    })
+      message: "Post created successfully",
+      filename,
+    });
   } catch (error) {
-    console.error('创建文章失败:', error)
-    res.status(500).json({ error: '创建文章失败', message: error.message })
+    sendServerError(res, "Failed to create post", error);
   }
-})
+});
 
-// 更新文章
-app.put('/api/posts/:filename', authenticate, async (req, res) => {
+app.put("/api/posts/:filename", authenticate, async (req, res) => {
   try {
-    const { filename } = req.params
-    const { content } = req.body
+    const { filename } = req.params;
+    const { content } = req.body;
 
     if (!content) {
-      return res.status(400).json({ error: '缺少必要参数：content' })
+      return res.status(400).json({ error: "Missing required parameter: content" });
     }
 
     if (!isValidFilename(filename)) {
-      return res.status(400).json({ error: '无效的文件名' })
+      return res.status(400).json({ error: "Invalid filename" });
     }
 
-    const filePath = path.join(POSTS_DIR, filename)
+    const filePath = path.join(POSTS_DIR, filename);
 
-    // 检查文件是否存在
     try {
-      await fs.access(filePath)
+      await fs.access(filePath);
     } catch {
-      return res.status(404).json({ error: '文章不存在' })
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    // 更新文件
-    await fs.writeFile(filePath, content, 'utf-8')
+    await fs.writeFile(filePath, content, "utf-8");
 
-    console.log(`✅ 更新文章成功: ${filename}`)
     res.json({
       success: true,
-      message: '文章更新成功',
-      filename
-    })
+      message: "Post updated successfully",
+      filename,
+    });
   } catch (error) {
-    console.error('更新文章失败:', error)
-    res.status(500).json({ error: '更新文章失败', message: error.message })
+    sendServerError(res, "Failed to update post", error);
   }
-})
+});
 
-// 删除文章
-app.delete('/api/posts/:filename', authenticate, async (req, res) => {
+app.delete("/api/posts/:filename", authenticate, async (req, res) => {
   try {
-    const { filename } = req.params
+    const { filename } = req.params;
 
     if (!isValidFilename(filename)) {
-      return res.status(400).json({ error: '无效的文件名' })
+      return res.status(400).json({ error: "Invalid filename" });
     }
 
-    const filePath = path.join(POSTS_DIR, filename)
+    const filePath = path.join(POSTS_DIR, filename);
 
-    // 检查文件是否存在
     try {
-      await fs.access(filePath)
+      await fs.access(filePath);
     } catch {
-      return res.status(404).json({ error: '文章不存在' })
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    // 删除文件
-    await fs.unlink(filePath)
+    await fs.unlink(filePath);
 
-    console.log(`✅ 删除文章成功: ${filename}`)
     res.json({
       success: true,
-      message: '文章删除成功',
-      filename
-    })
+      message: "Post deleted successfully",
+      filename,
+    });
   } catch (error) {
-    console.error('删除文章失败:', error)
-    res.status(500).json({ error: '删除文章失败', message: error.message })
+    sendServerError(res, "Failed to delete post", error);
   }
-})
+});
 
-// 错误处理中间件
 app.use((err, req, res, next) => {
-  console.error('服务器错误:', err)
-  res.status(500).json({
-    error: '服务器内部错误',
-    message: err.message
-  })
-})
+  console.error("Unhandled server error:", err);
+  res.status(500).json({ error: "Internal server error" });
+});
 
-// 启动服务器
 app.listen(PORT, () => {
-  console.log(`
-╔════════════════════════════════════════╗
-║   博客后端服务已启动 🚀                ║
-║   端口: ${PORT}                          ║
-║   文章目录: ${POSTS_DIR}
-║   允许来源: http://localhost:5173      ║
-╚════════════════════════════════════════╝
-  `)
-})
+  console.log(`Blog backend is running on port ${PORT}`);
+  console.log(`Allowed origins: ${ALLOWED_ORIGINS.join(", ")}`);
+});
