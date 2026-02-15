@@ -1,7 +1,7 @@
 ---
 title: Kaggle 贷款偿还预测竞赛实战：从基线到 Top 53% 的优化之旅
 published: 2025-11-30
-pinned: true
+pinned: false
 description: 记录一次完整的 Kaggle 竞赛实践，从基线模型到 GPU 加速集成模型的演进过程，涵盖特征工程、模型优化和过拟合诊断的完整经验。通过渐进式优化策略，实现了排名提升 48 位和 1.87% 的 AUC 增益。
 tags: [Kaggle, 机器学习, 特征工程, 模型集成]
 category: 数据科学
